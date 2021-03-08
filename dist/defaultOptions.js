@@ -63,6 +63,14 @@ exports.defaultOptions = {
         lineHeight: 1,
         textAlign: "center",
     },
+    watermark: {
+        fontSize: "10px",
+        fontWeight: "bold",
+        fontFamily: "sans-serif",
+        color: "#dddddd",
+        lineHeight: 1,
+        textAlign: "center",
+    },
 };
 exports.default = exports.defaultOptions;
 //# sourceMappingURL=defaultOptions.js.map

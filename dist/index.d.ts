@@ -36,6 +36,7 @@ export declare class CanvasTable {
     private calculateColumnWidths;
     private calculateTableDimensions;
     private calculatePadding;
+    private generateWatermark;
     private generateTitle;
     private generateRows;
     private drawColumnBorder;

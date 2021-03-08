@@ -250,7 +250,7 @@ export class CanvasTable {
   }
 
   private generateWatermark(watermark: CTWatermark): void {
-    const { ctx, canvasWidth, canvasHeight, x, y } = this;
+    const { ctx, canvasWidth, canvasHeight } = this;
     if (!watermark.text) {
       return;
     }
@@ -258,9 +258,6 @@ export class CanvasTable {
     ctx.font = `${watermark.fontWeight} ${watermark.fontSize} ${watermark.fontFamily}`;
     ctx.fillStyle = watermark.color;
     ctx.textAlign = watermark.textAlign;
-    const lineHeight = Math.round(
-      parseInt(watermark.fontSize, 10) * watermark.lineHeight
-    );
     const watermarkX = watermark.textAlign === "center" ? canvasWidth / 2 : 0;
     const watermarkY = watermark.textAlign === "center" ? canvasHeight / 2 : 0;
     const isFat = (text) => ctx.measureText(text).width > this.tableWidth;
@@ -503,7 +500,15 @@ export class CanvasTable {
       this.options = { ...defaultOptions };
       return;
     }
-    const { borders, header, cell, fader, subtitle, title } = defaultOptions;
+    const {
+      borders,
+      header,
+      cell,
+      fader,
+      subtitle,
+      title,
+      watermark,
+    } = defaultOptions;
     const defaultPadding = defaultOptions.padding as CTExtractedPadding;
     const padding =
       options.padding !== undefined
@@ -523,6 +528,9 @@ export class CanvasTable {
         ? { ...subtitle, ...options.subtitle }
         : subtitle,
       title: options.title ? { ...title, ...options.title } : title,
+      watermark: options.watermark
+        ? { ...watermark, ...options.watermark }
+        : watermark,
     };
   }
 

@@ -46,11 +46,12 @@ class CanvasTable {
     generateTable() {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const { options: { padding, title, subtitle }, } = this;
+                const { options: { padding, watermark, title, subtitle }, } = this;
                 const tablePadding = this.calculatePadding(padding);
                 this.y = tablePadding.top;
                 this.x = tablePadding.left;
                 try {
+                    this.generateWatermark(watermark);
                     this.generateTitle(title);
                     this.generateTitle(subtitle);
                     this.calculateColumnWidths();
@@ -191,6 +192,27 @@ class CanvasTable {
             };
         }
         return value;
+    }
+    generateWatermark(watermark) {
+        const { ctx, canvasWidth, canvasHeight } = this;
+        if (!watermark.text) {
+            return;
+        }
+        ctx.font = `${watermark.fontWeight} ${watermark.fontSize} ${watermark.fontFamily}`;
+        ctx.fillStyle = watermark.color;
+        ctx.textAlign = watermark.textAlign;
+        const watermarkX = watermark.textAlign === "center" ? canvasWidth / 2 : 0;
+        const watermarkY = watermark.textAlign === "center" ? canvasHeight / 2 : 0;
+        const isFat = (text) => ctx.measureText(text).width > this.tableWidth;
+        let cellValue = watermark.text;
+        const valueWithEllipsis = () => `${cellValue}${CanvasTable.ELLIPSIS}`;
+        if (isFat(valueWithEllipsis())) {
+            while (isFat(valueWithEllipsis())) {
+                cellValue = cellValue.slice(0, -1);
+            }
+            cellValue = valueWithEllipsis();
+        }
+        ctx.fillText(cellValue, watermarkX, watermarkY);
     }
     generateTitle(title) {
         const { ctx, tableWidth, x, y } = this;
@@ -358,14 +380,15 @@ class CanvasTable {
             this.options = Object.assign({}, defaultOptions_1.default);
             return;
         }
-        const { borders, header, cell, fader, subtitle, title } = defaultOptions_1.default;
+        const { borders, header, cell, fader, subtitle, title, watermark, } = defaultOptions_1.default;
         const defaultPadding = defaultOptions_1.default.padding;
         const padding = options.padding !== undefined
             ? typeof options.padding !== "number"
                 ? Object.assign(Object.assign({}, defaultPadding), options.padding) : options.padding
             : defaultPadding;
         this.options = Object.assign(Object.assign(Object.assign({}, defaultOptions_1.default), options), { borders: options.borders ? Object.assign(Object.assign({}, borders), options.borders) : borders, header: options.header ? Object.assign(Object.assign({}, header), options.header) : header, cell: options.cell ? Object.assign(Object.assign({}, cell), options.cell) : cell, fader: options.fader ? Object.assign(Object.assign({}, fader), options.fader) : fader, padding: padding, subtitle: options.subtitle
-                ? Object.assign(Object.assign({}, subtitle), options.subtitle) : subtitle, title: options.title ? Object.assign(Object.assign({}, title), options.title) : title });
+                ? Object.assign(Object.assign({}, subtitle), options.subtitle) : subtitle, title: options.title ? Object.assign(Object.assign({}, title), options.title) : title, watermark: options.watermark
+                ? Object.assign(Object.assign({}, watermark), options.watermark) : watermark });
     }
     throwErrorIfNotGenerated() {
         if (!this.isGenerated) {

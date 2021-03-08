@@ -20,6 +20,7 @@ export declare type CTOptions = {
     padding?: Partial<CTPadding>;
     subtitle?: Partial<CTTitle>;
     title?: Partial<CTTitle>;
+    watermark?: Partial<CTWatermark>;
 };
 export declare type CTInternalOptions = {
     borders: CTBorders;
@@ -33,9 +34,13 @@ export declare type CTInternalOptions = {
     padding: CTPadding;
     subtitle: CTTitle;
     title: CTTitle;
+    watermark: CTWatermark;
 };
 export declare type CTTitle = {
     multiline?: boolean;
+    text?: string;
+} & CTTextStyle;
+export declare type CTWatermark = {
     text?: string;
 } & CTTextStyle;
 export declare type CTBorder = {
