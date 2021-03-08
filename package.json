@@ -1,6 +1,5 @@
 {
     "author": "Eliz Kilic",
-    "dependencies": {},
     "description": "Fast table implementation in Canvas",
     "devDependencies": {
         "@types/mocha": "^5.0.0",
@@ -20,6 +19,9 @@
         "canvas": "^2.6.1"
     },
     "repository": "github:el/canvas-table",
+    "precommit": [
+        "build"
+    ],
     "scripts": {
         "build": "tsc",
         "clean": "rm -rf dist; rm -f test/*.png",
