@@ -7,6 +7,7 @@ import {
   CTInternalOptions,
   CTColumn,
   CTTitle,
+  CTWatermark,
   CTPadding,
   CTExtractedPadding,
   CTTableDimensions,
@@ -70,12 +71,13 @@ export class CanvasTable {
   public async generateTable(): Promise<void> {
     return new Promise((resolve, reject) => {
       const {
-        options: { padding, title, subtitle },
+        options: { padding, watermark, title, subtitle },
       } = this;
       const tablePadding = this.calculatePadding(padding);
       this.y = tablePadding.top;
       this.x = tablePadding.left;
       try {
+        this.generateWatermark(watermark);
         this.generateTitle(title);
         this.generateTitle(subtitle);
         this.calculateColumnWidths();
@@ -245,6 +247,33 @@ export class CanvasTable {
       };
     }
     return value;
+  }
+
+  private generateWatermark(watermark: CTWatermark): void {
+    const { ctx, canvasWidth, canvasHeight, x, y } = this;
+    if (!watermark.text) {
+      return;
+    }
+
+    ctx.font = `${watermark.fontWeight} ${watermark.fontSize} ${watermark.fontFamily}`;
+    ctx.fillStyle = watermark.color;
+    ctx.textAlign = watermark.textAlign;
+    const lineHeight = Math.round(
+      parseInt(watermark.fontSize, 10) * watermark.lineHeight
+    );
+    const watermarkX = watermark.textAlign === "center" ? canvasWidth / 2 : 0;
+    const watermarkY = watermark.textAlign === "center" ? canvasHeight / 2 : 0;
+    const isFat = (text) => ctx.measureText(text).width > this.tableWidth;
+    let cellValue = watermark.text;
+    const valueWithEllipsis = () => `${cellValue}${CanvasTable.ELLIPSIS}`;
+    if (isFat(valueWithEllipsis())) {
+      while (isFat(valueWithEllipsis())) {
+        cellValue = cellValue.slice(0, -1);
+      }
+      cellValue = valueWithEllipsis();
+    }
+
+    ctx.fillText(cellValue, watermarkX, watermarkY);
   }
 
   private generateTitle(title: CTTitle): void {

@@ -23,6 +23,7 @@ export type CTOptions = {
   padding?: Partial<CTPadding>;
   subtitle?: Partial<CTTitle>;
   title?: Partial<CTTitle>;
+  watermark?: Partial<CTWatermark>;
 };
 
 export type CTInternalOptions = {
@@ -37,10 +38,15 @@ export type CTInternalOptions = {
   padding: CTPadding;
   subtitle: CTTitle;
   title: CTTitle;
+  watermark: CTWatermark;
 };
 
 export type CTTitle = {
   multiline?: boolean;
+  text?: string;
+} & CTTextStyle;
+
+export type CTWatermark = {
   text?: string;
 } & CTTextStyle;
 

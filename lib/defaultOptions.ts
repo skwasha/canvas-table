@@ -63,6 +63,14 @@ export const defaultOptions: CTInternalOptions = {
     lineHeight: 1,
     textAlign: "center",
   },
+  watermark: {
+    fontSize: "10px",
+    fontWeight: "bold",
+    fontFamily: "sans-serif",
+    color: "#dddddd",
+    lineHeight: 1,
+    textAlign: "center",
+  },
 };
 
 export default defaultOptions;
