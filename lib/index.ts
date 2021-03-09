@@ -258,8 +258,12 @@ export class CanvasTable {
     ctx.font = `${watermark.fontWeight} ${watermark.fontSize} ${watermark.fontFamily}`;
     ctx.fillStyle = watermark.color;
     ctx.textAlign = watermark.textAlign;
+    const lineHeight = Math.round(
+      parseInt(watermark.fontSize, 10) * watermark.lineHeight
+    );
     const watermarkX = watermark.textAlign === "center" ? canvasWidth / 2 : 0;
-    const watermarkY = watermark.textAlign === "center" ? canvasHeight / 2 : 0;
+    const watermarkY =
+      watermark.textAlign === "center" ? canvasHeight / 2 - lineHeight / 2 : 0;
     const isFat = (text) => ctx.measureText(text).width > this.tableWidth;
     let cellValue = watermark.text;
     const valueWithEllipsis = () => `${cellValue}${CanvasTable.ELLIPSIS}`;
