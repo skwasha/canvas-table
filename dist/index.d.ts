@@ -26,6 +26,7 @@ export declare class CanvasTable {
     private tableWidth;
     private x;
     private y;
+    toArray(items: any, columnNames: any): any[];
     constructor(canvas: Canvas | HTMLCanvasElement, config: CTConfig);
     generateTable(): Promise<void>;
     renderToBlob(): Promise<Blob>;

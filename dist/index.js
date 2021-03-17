@@ -37,11 +37,23 @@ class CanvasTable {
             this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         }
         this.ctx.textBaseline = "top";
-        this.columns = config.columns;
+        this.columns = config.columns || [];
         this.data = config.data;
         if (this.options.header && config.columns) {
             this.data = [config.columns.map((column) => column.title), ...this.data];
         }
+    }
+    toArray(items, columnNames) {
+        if (Array.isArray(items))
+            return items;
+        let rows = [];
+        for (let key in items) {
+            let item = {};
+            item[columnNames[0] || "key"] = key;
+            item[columnNames[1] || "value"] = items[key];
+            rows.push(item);
+        }
+        return rows;
     }
     generateTable() {
         return __awaiter(this, void 0, void 0, function* () {

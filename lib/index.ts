@@ -46,6 +46,18 @@ export class CanvasTable {
   private x = 0;
   private y = 0;
 
+  public toArray(items, columnNames): any[] {
+    if (Array.isArray(items)) return items;
+    let rows: any[] = [];
+    for (let key in items) {
+      let item: {} = {};
+      item[columnNames[0] || "key"] = key;
+      item[columnNames[1] || "value"] = items[key];
+      rows.push(item);
+    }
+    return rows;
+  }
+
   constructor(canvas: Canvas | HTMLCanvasElement, config: CTConfig) {
     this.canvas_ = canvas;
     this.canvasHeight = canvas.height;
@@ -60,8 +72,20 @@ export class CanvasTable {
     }
     this.ctx.textBaseline = "top";
 
-    this.columns = config.columns;
+    this.columns = config.columns || [];
+    // let columnNames: any[] = this.columns;
     this.data = config.data;
+    // this.data = this.toArray(this.data, this.columns);
+
+    // if not suppled column names, automatically determine columns from data keys
+    // if (!columnNames.length) {
+    //   this.data.forEach(function (item) {
+    //     for (let columnName in item) {
+    //       if (columnNames.indexOf(columnName) === -1)
+    //         columnNames.push(columnName);
+    //     }
+    //   });
+    // }
 
     if (this.options.header && config.columns) {
       this.data = [config.columns.map((column) => column.title), ...this.data];
